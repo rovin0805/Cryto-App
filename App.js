@@ -8,13 +8,14 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    auth().onAuthStateChanged((user) => {
+    const subscriber = auth().onAuthStateChanged((user) => {
       if (user) {
         setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false);
       }
     });
+    return subscriber;
   }, []);
 
   return (
