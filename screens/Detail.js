@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components/native";
 import { getCoinHistory, getCoinInfo, getSymbol } from "../api";
 import { Container } from "../components/shared";
 import Loader from "../components/Loader";
+import { VictoryChart, VictoryLine, VictoryScatter } from "victory-native";
 
 const RowWrapper = styled.View`
   flex-direction: row;
@@ -23,7 +24,7 @@ const HeaderTitle = styled.Text`
   font-size: 16px;
 `;
 
-const Hedaer = ({ symbol }) => (
+const Header = ({ symbol }) => (
   <RowWrapper>
     <Icon source={{ uri: getSymbol(symbol) }} />
     <HeaderTitle>{symbol}</HeaderTitle>
@@ -44,15 +45,44 @@ const Detail = ({
     ["coinHistory", id],
     getCoinHistory
   );
-  const loading = infoLoading || historyLoading;
+  const [victoryData, setVictoryData] = useState();
+  const loading = infoLoading || historyLoading || !victoryData;
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <Hedaer symbol={symbol} />,
+      headerTitle: () => <Header symbol={symbol} />,
     });
   }, []);
 
-  return loading ? <Loader /> : <Container></Container>;
+  useEffect(() => {
+    if (historyData) {
+      setVictoryData(
+        historyData.map((coin) => ({
+          x: new Date(coin.timestamp).getTime(),
+          y: coin.price,
+        }))
+      );
+    }
+  }, [historyData]);
+
+  return loading ? (
+    <Loader />
+  ) : (
+    <Container>
+      <VictoryChart height={360}>
+        <VictoryLine
+          animate
+          interpolation="monotoneX"
+          data={victoryData}
+          style={{ data: { stroke: "#1abc9c" } }}
+        />
+        <VictoryScatter
+          data={victoryData}
+          style={{ data: { fill: "#1abc9c" } }}
+        />
+      </VictoryChart>
+    </Container>
+  );
 };
 
 export default Detail;
