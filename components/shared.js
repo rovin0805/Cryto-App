@@ -5,8 +5,9 @@ export const Container = styled.View`
   background-color: ${BLACK_COLOR};
   flex: 1;
   align-items: center;
+  justify-content: center;
   color: white;
-  padding: 60px 20px;
+  padding: 20px;
 `;
 
 export const TextInput = styled.TextInput`

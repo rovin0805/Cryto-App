@@ -73,7 +73,7 @@ const Login = ({ navigation: { navigate } }) => {
         placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
         onSubmitEditing={onSubmitPasswordEditing}
       />
-      <Btn disabled={loading}>
+      <Btn disabled={loading} onPress={onSubmitPasswordEditing}>
         {loading ? (
           <ActivityIndicator color="white" />
         ) : (
