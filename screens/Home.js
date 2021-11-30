@@ -37,7 +37,7 @@ const Home = ({ navigation: { setOptions } }) => {
         }}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         renderItem={({ item, index }) => (
-          <Coin index={index} symbol={item.symbol} />
+          <Coin index={index} symbol={item.symbol} id={item.id} />
         )}
       />
     </Container>

@@ -1,5 +1,6 @@
+import { useNavigation } from "@react-navigation/core";
 import React, { useEffect, useRef } from "react";
-import { Animated, View } from "react-native";
+import { Animated, View, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { getSymbol } from "../api";
 
@@ -23,7 +24,8 @@ const Icon = styled.Image`
   margin-bottom: 10px;
 `;
 
-const Coin = ({ symbol, index }) => {
+const Coin = ({ symbol, index, id }) => {
+  const navigation = useNavigation();
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = opacity.interpolate({
     inputRange: [0, 1],
@@ -39,10 +41,15 @@ const Coin = ({ symbol, index }) => {
   }, []);
 
   return (
-    <Wrapper style={{ flex: 0.31, opacity, transform: [{ scale }] }}>
-      <Icon source={{ uri: getSymbol(symbol) }} />
-      <CoinName>{symbol}</CoinName>
-    </Wrapper>
+    <TouchableOpacity
+      style={{ flex: 0.31 }}
+      onPress={() => navigation.navigate("Detail", { symbol, id })}
+    >
+      <Wrapper style={{ opacity, transform: [{ scale }] }}>
+        <Icon source={{ uri: getSymbol(symbol) }} />
+        <CoinName>{symbol}</CoinName>
+      </Wrapper>
+    </TouchableOpacity>
   );
 };
 
